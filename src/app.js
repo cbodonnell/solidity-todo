@@ -69,6 +69,23 @@ App = {
         App.setLoading(false)
     },
 
+    createTask: async () => {
+        App.setLoading(true)
+        const content = $('#newTask').val()
+        await App.todoList.createTask(content)
+        // TODO: Do this without reload
+        window.location.reload()
+    },
+
+    toggleCompleted: async (e) => {
+        console.log(e);
+        App.setLoading(true)
+        const taskId = e.target.name
+        await App.todoList.toggleCompleted(taskId)
+        // TODO: Do this without reload
+        window.location.reload()
+    },
+
     setLoading: (loading) => {
         App.loading = loading
         const loader = $('#loader')
@@ -94,10 +111,10 @@ App = {
 
             const $newTaskTemplate = $taskTemplate.clone()
             $newTaskTemplate.find('.content').html(taskContent)
-            $newTaskTemplate.find('.input')
-                .prop('name', taskId)
-                .prop('checked', taskCompleted)
-                // .on('click', App.toggleCompleted)
+            $newTaskTemplate.find('input')
+            .prop('name', taskId)
+            .prop('checked', taskCompleted)
+            .on('click', App.toggleCompleted)
 
             if (taskCompleted) {
                 $('#completedTaskList').append($newTaskTemplate)
